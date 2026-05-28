@@ -44,7 +44,7 @@ router.get('/facebook', (req, res) => {
   const params = new URLSearchParams({
     client_id:    process.env.META_APP_ID,
     redirect_uri: process.env.BASE_URL + '/auth/facebook/callback',
-    scope:        'pages_manage_metadata,pages_read_engagement,leads_retrieval,pages_show_list',
+    scope:        'public_profile',
     response_type: 'code',
   });
   res.redirect('https://www.facebook.com/v19.0/dialog/oauth?' + params);
