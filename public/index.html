@@ -1,5 +1,46 @@
 <!DOCTYPE html>
-<html>
-<head><title>Ko'prik</title></head>
-<body><h1>Ko'prik ishlayapti!</h1></body>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ko'prik — Lead avtomatlashtirish</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+  .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+  h1 { color: #1877f2; margin-bottom: 8px; }
+  p { color: #666; margin-bottom: 24px; }
+  label { display: block; font-weight: bold; margin-bottom: 6px; color: #333; }
+  input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 16px; }
+  button { width: 100%; padding: 14px; background: #1877f2; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  button:hover { background: #166fe5; }
+  .status { margin-top: 16px; padding: 12px; border-radius: 8px; text-align: center; display: none; }
+  .success { background: #e6f4ea; color: #2d7a3a; display: block; }
+  .error { background: #fce8e6; color: #c5221f; display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🌉 Ko'prik</h1>
+  <p>Facebook Lead Ads → Google Sheets avtomatlashtirish</p>
+  <label>Page Access Token</label>
+  <input type="text" id="token" placeholder="EAAxxxxx..." />
+  <label>Spreadsheet ID</label>
+  <input type="text" id="sheet" placeholder="1BxiMVs0XRA..." />
+  <button onclick="save()">Saqlash va ulash</button>
+  <div class="status" id="status"></div>
+</div>
+<script>
+async function save() {
+  const token = document.getElementById('token').value.trim();
+  const sheet = document.getElementById('sheet').value.trim();
+  const status = document.getElementById('status');
+  if (!token || !sheet) { status.className = 'status error'; status.textContent = 'Iltimos, barcha maydonlarni to\'ldiring!'; return; }
+  const res = await fetch('/api/fb/setup', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ token, sheet }) });
+  const data = await res.json();
+  if (data.ok) { status.className = 'status success'; status.textContent = '✅ Muvaffaqiyatli ulandi!'; }
+  else { status.className = 'status error'; status.textContent = '❌ Xato: ' + data.error; }
+}
+</script>
+</body>
 </html>
